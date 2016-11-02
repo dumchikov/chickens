@@ -1,0 +1,26 @@
+﻿@using Chicken.Services
+@{
+    var currentAccount = ((CurrentAccount)ViewBag.CurrentAccount).Account;
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <img height="55" class="img-circle" src="@currentAccount.Avatar"/>
+            &nbsp; 
+            @(currentAccount.FirstName + " " + currentAccount.LastName)
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a href="@Url.Action("Logout", "Account")">Выйти</a>
+            </li>
+        </ul>
+    </li>
+
+}
+else
+{
+    <li><a href="@Url.Action("SendVkAuthRequest", "Account")" data-location="story">Войти</a></li>
+}

@@ -1,0 +1,12 @@
+﻿@model Chicken.Web.Models.ExtendedDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Navbar.cshtml";
+}
+
+<ul class="nav navbar-nav navbar-right menu">
+    <li><a href="javacript:void(0);" data-location="story">История</a></li>
+    <li><a href="javacript:void(0);" data-location="photos">Фотографии</a></li>
+    <li><a href="javacript:void(0);" data-location="comments">Комментарии</a></li>
+    @Html.Partial("~/Views/Main/AccountBar.cshtml")
+</ul>

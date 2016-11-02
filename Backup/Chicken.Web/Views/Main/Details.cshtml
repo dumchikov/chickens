@@ -1,0 +1,94 @@
+﻿@model Chicken.Web.Models.ExtendedDetailsViewModel
+
+@{
+    ViewBag.Title = "Курицы Харькова - История";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        detailsModule.init();
+    })
+</script>
+
+<div class="container details">
+
+    @Html.Partial("~/Views/Main/DetailsNavbar.cshtml", Model)
+
+    <div class="row story">
+        <div class="col-md-10 col-md-offset-1 story-text">
+            <p>@Model.Text</p>
+        </div>
+        <div class="col-md-8 col-md-offset-2 story-info">
+            <div style="text-align: center" class="col-md-3">
+                <span>@Model.Date</span>
+            </div>
+            <div style="text-align: center" class="col-md-3">
+                Мне нравится
+                &nbsp;<i class="glyphicon like"></i>
+                <span>@Model.Likes</span>
+            </div>
+            <div style="text-align: center" class="col-md-3">
+                @Model.Comments.Count() комментариев
+            </div>
+
+            <div style="text-align: center" class="col-md-3">
+                <div style="margin: 0 auto;" id="vk_like"></div>
+                <script type="text/javascript">
+                    VK.Widgets.Like("vk_like", { type: "button" });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="row photos">
+        @for (var i = 0; i < Model.Photos.Count(); i++)
+        {
+            <div class="col-xs-6 col-md-4 col-lg-4">
+                <div class="thumbnail">
+                    <a href="@Model.Photos[i]" data-toggle="lightbox" data-gallery="multiimages" data-title="@(string.Format("Фото {0} из {1}", i + 1, Model.Photos.Count()))">
+                        <div class="square" style="background-image: url('@Model.Photos[i]'); position: relative;"></div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="comments">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <p align="center" style="color:#f54760;">Хотите увидеть все @Model.Comments.Count() комментариев - <a href="@Url.Action("SendVkAuthRequest", "Account")">войдите через ВКонтакте</a></p>
+        }
+        else
+        {
+            foreach (var comment in Model.Comments)
+            {
+            <div class="row">
+                <div class="col-xs-2 avatar">
+                    <a href="javascript:void();">
+                        <img src="@comment.Avatar"/><br/>
+                        <a style="font-size: 10.5pt;" href="">Показать</a>
+                    </a>
+                </div>
+                <div class="col-xs-10 comment-text">
+                    <a href="javascript:void();">@comment.Name</a>
+                    <p>@comment.Text</p>
+                    <span>@comment.Date</span>
+                </div>
+            </div>
+            }
+        }
+    </div>
+    <hr />
+
+    <div class="row vk-comments" style="padding: 0 7.5%;">
+        <div class="row" style="text-align: center;">
+            <div id="vk_comments_@Model.Id"></div>
+            <script type="text/javascript">
+                VK.Widgets.Comments("vk_comments_@Model.Id", { limit: 10, attach: "*" });
+            </script>
+        </div>
+    </div>
+</div>
+
+

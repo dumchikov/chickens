@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Chicken.Domain.Models.Group>
+
+    @{
+        ViewBag.Title = "Index";
+    }
+
+    <div class="container" style="background: #fff">
+        <div class="row" id="banner">
+            <img src="@Url.Content("~/Images/banner_ua.jpg")" />
+        </div>
+
+        <div class="row" id="title">
+            <h2>Курицы Украины - истории и откровения о девушках</h2>
+            <hr />
+            <p>
+                Курицы Украины - уникальный социальный проект, разоблачающий популярные закрытые группы ВКонтакте - Курицы Киева, Курицы Харькова и другие, где парни делятся откровениями и жизненными наблюдениями касательно девушек. Полный слив, теперь вся база историй о девушках открыта для ВСЕХ. Смотри фото, читай истории и комментарии.
+            </p>
+        </div>
+
+        <hr />
+        <div class="row" id="groups">
+            <div class="col-lg-8" style="border-right: 1px solid #eee">
+                @foreach (dynamic group in Model)
+            {
+                    <div class="col-lg-6 group-thumbnail">
+                        <a style="position: relative;" href="@Url.RouteUrl("main", new { group = group.GroupDomainName })">
+                            <img class="img-circle" src="@Url.Content("~/Images/" + group.Avatar)" alt="@group.Name" width="160">
+                            <h4>@group.Name</h4>
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-4">
+                <h2 style="color: #f54760; margin-top: 0;">Новости</h2>
+
+                <p>
+                    <!-- Put this div tag to the place, where the Poll block will be -->
+                    <div id="vk_poll"></div>
+                    <script type="text/javascript">
+                        VK.Widgets.Poll("vk_poll", { width: "300" }, "196495390_457ed44035852c8d94");
+                    </script>
+                </p>
+
+                <p>
+                    <b>11.03.2016</b> - <span style="color: red;">УРА!:</span> После длительного перерыва активности на сайте добавлены новые курочки. Смотрите Днепр и Киев. Предлагайте новые истории, давайте поднимем былой интерес к ресурсу! 
+                </p>
+
+                <p>
+                    <b>08.09.2015</b> - <span style="color: red;">Заблокированы группы Вконтакте:</span> Уважаемые посетители сайта "Курицы Украины", группы ВКонтакте "Курицы Харькова" и "Курицы Днепра" были заблокированы администрацией ВКонтакте, в связи с этим обновлений с этих групп пока не будет.
+                </p>
+
+                <p>
+                    <b>18.08.2015</b> - <span style="color: red;">Исправлены ошибки:</span>  была исправлена ошибка входа через Вконтакте. Теперь все жалющие могут войти через ВКонтакте и прочитать комментарии.
+                </p>
+
+                <p>
+                    <b>01.08.2015</b> - <span style="color: red;">На сайте "Курицы Украины" произошли изменения:</span>  теперь комментарии доступны только для авторизированных пользователей. Для этого необходимо войти через ВКонтакте.
+                </p>
+
+            </div>
+        </div>
+    </div>

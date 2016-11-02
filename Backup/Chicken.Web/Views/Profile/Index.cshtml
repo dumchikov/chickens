@@ -1,0 +1,41 @@
+﻿@using Chicken.Services
+@{
+    ViewBag.Title = "Index.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var currentAccount = ((CurrentAccount)ViewBag.CurrentAccount).Account;
+}
+
+<script type="text/javascript">
+    $(function () {
+        mainModule.setPadding();
+    })
+</script>
+
+@Html.Partial("~/Views/Main/ProfileNavbar.cshtml")
+<div class="container">
+    <div class="row">
+        <h2>Мой профайл</h2>
+    </div>
+
+    <div class="row" style="background: #fff; padding: 20px;">
+        <div class="col-xs-2" style="text-align: center">
+            <img src="@currentAccount.Avatar"/>
+        </div>
+        <div class="col-xs-10">
+            <h3 style="margin-top: 0">@(currentAccount.LastName + " " + currentAccount.FirstName)</h3>
+            <p style="margin: 0">Email: @currentAccount.Email</p>
+            <p style="margin: 0">Открытых комментариев: @currentAccount.Comments.Count()</p>
+            <p style="margin: 0">Монеты: @currentAccount.Coins</p>
+            <p style="color: #f54760;">Чтобы купить 10 монет, нажмите кнопку ниже, стоимость 10 монет - 10грн.</p>
+            <form method="POST" accept-charset="utf-8" action="https://www.liqpay.com/api/checkout">
+                <input type="hidden" name="data" value="eyJ2ZXJzaW9uIjozLCJwdWJsaWNfa2V5IjoiaTQ0MDU3MDMwNDA0IiwiYW1vdW50IjoiMTAiLCJjdXJyZW5jeSI6IlVBSCIsImRlc2NyaXB0aW9uIjoiMTAg0JzQvtC90LXRgiAtINCa0YPRgNC40YbRiyDQo9C60YDQsNC40L3RiyIsInR5cGUiOiJidXkiLCJzYW5kYm94IjoiMSIsImxhbmd1YWdlIjoicnUiLCJwYXlfd2F5IjoiY2FyZCxsaXFwYXksZGVsYXllZCxpbnZvaWNlLHByaXZhdDI0In0=" />
+                <input type="hidden" name="signature" value="SY4Q0fvZJ4UVvSJG7Oz4c4oZhHc=" />
+                <input type="image" src="//static.liqpay.com/buttons/p9ru.png" name="btn_text" />
+            </form>
+        </div>
+    </div>
+</div>
+

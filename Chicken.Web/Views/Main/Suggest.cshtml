@@ -1,0 +1,85 @@
+﻿@model Chicken.Web.Models.SuggestModel
+
+<div class="container" id="new-post" style="background: #fff;display:none;">
+    <h2>Рассказать историю</h2>
+
+    <div class="form-group">
+        <label>История</label>
+        <textarea id="story-description" class="form-control" style="height:200px"></textarea>
+        <input id="story-group" type="hidden" value="@Model.GroupDomainName" />
+    </div>
+
+    <div class="form-group">
+        <label for="Uploader">Фото</label>
+
+        <input id="uploader"
+               name="uploader"
+               type="file"
+               class="file"
+               multiple />
+    </div>
+
+    <div class="form-group">
+        <button id="story-request-btn" class="btn btn-success">Отправить</button>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var storyRequest = {
+        Description: '',
+        GroupDomainName: $('#story-group').val(),
+        PhotosUrls: []
+    };
+
+    $(function () {
+        $('nav').height();
+        $('body').css('padding-top', '70px');
+        $('#story-request-btn').click(function () {
+            storyRequest.Description = $('#story-description').val();
+
+            $.ajax({
+                type: "POST",
+                url: "suggest",
+                data: JSON.stringify(storyRequest),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        alert("История успешно загружена и будет добавлена после проверки.");
+                        location.reload();
+                    }
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        })
+    })
+
+    $("#uploader").fileinput({
+        showUpload: false, // hide upload button
+        showRemove: false, // hide remove button
+        uploadAsync: true,
+        uploadUrl: "savephoto",
+        maxFileSize: 10000,
+        maxFilesNum: 10,
+        allowedFileTypes: ['image'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        },
+        language: 'ru'
+    })
+    .on("filebatchselected", function (event, files) {
+        // trigger upload method immediately after files are selected
+        $("#uploader").fileinput("upload");
+    })
+    .on('fileuploaded', function (event, data, previewId, index) {
+        var response = response = data.response;
+        if (response.Success) {
+            storyRequest.PhotosUrls.push(response.PhotoUrl)
+        }
+    });;;
+
+</script>

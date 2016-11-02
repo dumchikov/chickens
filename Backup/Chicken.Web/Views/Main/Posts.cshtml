@@ -1,0 +1,76 @@
+﻿@model Chicken.Web.Models.MainViewModel
+@{
+    ViewBag.Title = "Курицы Харькова";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        mainModule.init();
+        mainModule.initPagination(
+            $('.pagination-container'),
+            @Model.NumberOfPages,
+            @Model.CurrentPage,
+            '@Model.CurrentGroup');
+    })
+</script>
+
+@Html.Partial("~/Views/Main/MainNavbar.cshtml", Model)
+
+
+<div class="container main">
+    @if (Model.Keyword != null)
+    {
+        <div class="row" style="padding: 0 15px;">
+            @if (Model.Posts.Any())
+            {
+                <h2>Результаты поиска по запросу "@Model.Keyword"</h2>
+            }
+            else
+            {
+                <h2>Поиск по запросу "@Model.Keyword" не дал результатов</h2>
+            }
+        </div>
+    }
+    @if (ViewBag.IsTop != null)
+    {
+        <h2>ТОП-30 самых обсуждаемых девушек группы "@ViewBag.GroupName"</h2>
+    }
+
+    <div class="row content">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="col-xs-12 col-md-4 col-lg-3 item">
+                <a href="@Url.RouteUrl("details", new { id = post.Id })">
+                    <div class="thumbnail">
+                        @if (post.IsNew)
+                        { 
+                            <img src="~/Images/new_icon.png" style="position: absolute; right: 20px; top: 5px;" />
+                        }
+                        <img src="@post.Photo" />
+                        <div class="row post-info">
+                            <div class="col-xs-6 post-date">
+                                <span>@post.Date</span>
+                            </div>
+                            <div class="col-xs-6 post-ativities">
+                                <i class="glyphicon comment"></i>
+                                <span>@post.Comments</span>
+                                &nbsp;
+                                <i class="glyphicon like" style=""></i>
+                                <span>@post.Likes</span>
+                            </div>
+                        </div>
+                        <div class="caption">
+                            <p>@post.ShortText</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center pagination-container"></div>
+    </div>
+    <hr />
+</div>
+

@@ -1,0 +1,78 @@
+﻿@model Chicken.Web.Models.ProfileModel
+@using Chicken.Services
+@{
+    ViewBag.Title = "Index.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        mainModule.setPadding();
+        mainModule.initMasonry();
+        $('.delete').click(function (e) {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                method: "POST",
+                url: "profile/deletepost",
+                data: { id: id },
+                success: function (response) {
+                    if (response.Success) {
+
+                    }
+                }
+            })
+            e.preventDefault();
+        })
+    })
+</script>
+
+@Html.Partial("~/Views/Main/ProfileNavbar.cshtml")
+<div class="container">
+    <div class="row">
+        <h2>Мой профайл</h2>
+    </div>
+
+    <div class="row" style="background: #fff; padding: 20px;">
+        <div class="col-xs-2" style="text-align: center">
+            <img src="@Model.Avatar"/>
+        </div>
+        <div class="col-xs-10">
+            <h3 style="margin-top: 0">@Model.Name</h3>
+            <p style="margin: 0">Email: @Model.Email</p>
+        </div>
+    </div>
+
+    <h2>Мои истории</h2>
+    <div class="row content">
+        @foreach (var post in Model.UserPosts)
+        {
+            <div class="col-xs-12 col-md-4 col-lg-3 item">
+                <a href="@Url.RouteUrl("details", new { id = post.Id })">
+                    <div class="thumbnail">
+                        @if (post.IsSuggestion)
+                        {
+                            <img src="http://www.rpgnow.com/shared_images/icon_delete.png" style="position: absolute; right: 20px; top: 5px;z-index:9999;" data-id="@post.Id" class="delete" />
+                        }
+                        <img src="@post.Photo" />
+                        <div class="row post-info">
+                            <div class="col-xs-6 post-date">
+                                <span>@post.Date</span>
+                            </div>
+                            <div class="col-xs-6 post-ativities">
+                                <i class="glyphicon comment"></i>
+                                <span>@post.Comments</span>
+                                &nbsp;
+                                <i class="glyphicon like" style=""></i>
+                                <span>@post.Likes</span>
+                            </div>
+                        </div>
+                        <div class="caption">
+                            <p>@post.ShortText</p>
+                        </div>
+                    </div>                    
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
